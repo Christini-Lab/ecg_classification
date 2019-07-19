@@ -170,15 +170,18 @@ y_test[y_test == 4] = 1
 feature_columns = [tf.feature_column.numeric_column("ecg", shape=np.shape(X_train[0]))]
 model = models.Sequential()
 model.add(layers.Reshape((319, 1), input_shape=(319,)))
+model.add(layers.Conv1D(10, 20, activation='relu'))
+model.add(layers.MaxPooling1D(2))
+model.add(layers.Conv1D(10, 20, activation='relu'))
+model.add(layers.MaxPooling1D(2))
 model.add(layers.Dense(10))
 model.add(layers.Dense(10))
-model.add(layers.Dense(10))
-model.add(layers.Dense(1))
+model.add(layers.Dense(1, activation='sigmoid'))
 model.compile(optimizer='adam', loss='binary_crossentropy',metrics=['accuracy'])
 print(model.summary())
 
 BATCH_SIZE = 400
-EPOCHS = 4 
+EPOCHS = 14 
 history = model.fit(X_train,y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, verbose=1)
 
 test_loss, test_acc = model.evaluate(X_test, y_test)
